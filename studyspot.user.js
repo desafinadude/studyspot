@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StudySpot
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Skeleton For Spotify Study App
 // @author       Desafinadude
 // @match        *://open.spotify.com/*
