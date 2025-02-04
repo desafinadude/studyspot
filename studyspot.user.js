@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StudySpot
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      0.1
 // @description  Skeleton For Spotify Study App
 // @author       Desafinadude
 // @match        *://open.spotify.com/*
@@ -13,24 +13,23 @@ function seekToPercentage(percentage) {
     const fiberKey = Object.keys(progressBar).find(key => key.startsWith("__reactFiber"));
     const fiberNode = progressBar[fiberKey];
 
-    if (!fiberNode || !fiberNode.memoizedProps.onPointerDown) {
-        console.error("Could not find seek function.");
-        return;
-    }
+   
 
     const rect = progressBar.getBoundingClientRect();
     const xPosition = rect.left + (rect.width * (percentage / 100));
 
+    // Create a real PointerEvent
     const event = new PointerEvent("pointerdown", {
         bubbles: true,
         cancelable: true,
         view: window,
         clientX: xPosition,
-        clientY: rect.top + (rect.height / 2),
+        clientY: rect.top + (rect.height / 2), // Center of the progress bar
         pointerId: 1,
         pointerType: "mouse"
     });
 
+    // Dispatch the event on the progress bar
     progressBar.dispatchEvent(event);
 }
 
@@ -47,8 +46,7 @@ function prevTrack() {
 }
 
 
-(function() {
-    'use strict';
+
 
    (function() {
     'use strict';
@@ -56,11 +54,11 @@ function prevTrack() {
     // Create a container div
     const controlContainer = document.createElement("div");
     controlContainer.style.position = "fixed";
-    controlContainer.style.bottom = "20px";
-    controlContainer.style.right = "20px";
+    controlContainer.style.top = "0px";
+    controlContainer.style.right = "0px";
     controlContainer.style.display = "flex";  // Horizontal stacking
-    controlContainer.style.gap = "10px";  // Spacing between buttons
-    controlContainer.style.padding = "10px";
+    controlContainer.style.gap = "5px";  // Spacing between buttons
+    controlContainer.style.padding = "5px";
     controlContainer.style.background = "rgba(0, 0, 0, 0.8)";  // Semi-transparent black
     controlContainer.style.borderRadius = "10px";
     controlContainer.style.zIndex = "9999";
@@ -92,17 +90,22 @@ function prevTrack() {
         document.querySelector('[data-testid="control-button-skip-back"]').click();
     });
 
+    const seekButton = createButton("80", () => {
+        seekToPercentage(80);
+    });
+
+    
+
     // Append buttons to the container
     controlContainer.appendChild(prevButton);
     controlContainer.appendChild(playPauseButton);
     controlContainer.appendChild(nextButton);
+    controlContainer.appendChild(seekButton);
+       
 
     // Append container to the page
     document.body.appendChild(controlContainer);
 })();
+    
 
-
-    // Append button to body
-    document.body.appendChild(button);
-})();
 
