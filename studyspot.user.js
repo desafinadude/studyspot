@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StudySpot
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Skeleton For Spotify Study App
 // @author       Desafinadude
 // @match        *://open.spotify.com/*
@@ -13,24 +13,39 @@ function seekToPercentage(percentage) {
     const fiberKey = Object.keys(progressBar).find(key => key.startsWith("__reactFiber"));
     const fiberNode = progressBar[fiberKey];
 
-   
+    if (!progressBar || !fiberNode) {
+        console.error("Progress bar or React fiber node not found.");
+        return;
+    }
 
     const rect = progressBar.getBoundingClientRect();
     const xPosition = rect.left + (rect.width * (percentage / 100));
 
-    // Create a real PointerEvent
-    const event = new PointerEvent("pointerdown", {
+    // Create Pointer Down Event
+    const pointerDownEvent = new PointerEvent("pointerdown", {
         bubbles: true,
         cancelable: true,
         view: window,
         clientX: xPosition,
-        clientY: rect.top + (rect.height / 2), // Center of the progress bar
+        clientY: rect.top + (rect.height / 2),
         pointerId: 1,
         pointerType: "mouse"
     });
 
-    // Dispatch the event on the progress bar
-    progressBar.dispatchEvent(event);
+    // Create Pointer Up Event
+    const pointerUpEvent = new PointerEvent("pointerup", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: xPosition,
+        clientY: rect.top + (rect.height / 2),
+        pointerId: 1,
+        pointerType: "mouse"
+    });
+
+    // Dispatch both events
+    progressBar.dispatchEvent(pointerDownEvent);
+    setTimeout(() => progressBar.dispatchEvent(pointerUpEvent), 50); // Short delay for realism
 }
 
 function playPause() {
