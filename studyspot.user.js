@@ -34,6 +34,10 @@ function seekToPercentage(percentage) {
     progressBar.dispatchEvent(event);
 }
 
+function playPause() {
+    document.querySelector('[data-testid="control-button-playpause"]').click();
+}
+
 (function() {
     'use strict';
 
@@ -53,7 +57,7 @@ function seekToPercentage(percentage) {
 
     // Add click event to call seek function
     button.addEventListener("click", function() {
-        seekToPercentage(50); // Seek to 50%
+        playPause() // Seek to 50%
     });
 
     // Append button to body
